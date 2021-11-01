@@ -1,0 +1,18 @@
+dist_thresh: 0.03
+datasets:
+- mouse
+references:
+- silva
+- rdp
+- gg
+weights:
+- simple
+methods:
+- open
+- closed
+ref_fracs:
+    start: 5
+    stop: 6
+    step: 1
+seeds: 10
+configpath: 'config/config.yaml'
