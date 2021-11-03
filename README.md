@@ -67,7 +67,7 @@ mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>%
                                   config[['ref_fracs']][['step']])/10)
          )
 #> 
-#> ── Column specification ─────────────────────────────────────────────────────────────────────────────────
+#> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
 #>   .default = col_double(),
 #>   `h:m:s` = col_time(format = ""),
@@ -85,7 +85,7 @@ mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>%
 mothur_1.47.0 <- read_tsv('results/optifit_split_results.tsv') %>% 
   mutate(mothur_version = '1.47.0')
 #> 
-#> ── Column specification ─────────────────────────────────────────────────────────────────────────────────
+#> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
 #>   .default = col_double(),
 #>   `h:m:s` = col_time(format = ""),

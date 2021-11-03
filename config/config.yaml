@@ -1,5 +1,6 @@
 dist_thresh: 0.03
 datasets:
+- human
 - mouse
 references:
 - silva
@@ -13,5 +14,5 @@ ref_fracs:
     start: 5
     stop: 6
     step: 1
-seeds: 50
+seeds: 100
 configpath: 'config/config.yaml'
