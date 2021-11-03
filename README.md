@@ -66,40 +66,28 @@ mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>%
                                   config[['ref_fracs']][['stop']],
                                   config[['ref_fracs']][['step']])/10)
          )
+#> Rows: 8800 Columns: 42
+#> ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> Delimiter: "\t"
+#> chr   (4): dataset, method, ref_weight, tool
+#> dbl  (32): label, cutoff, numotus, tp, tn, fp, fn, sensitivity, specificity,...
+#> lgl   (5): printref, check_split_passed, ref, region, criteria
+#> time  (1): h:m:s
 #> 
-#> ── Column specification ────────────────────────────────────────────────────────
-#> cols(
-#>   .default = col_double(),
-#>   `h:m:s` = col_time(format = ""),
-#>   dataset = col_character(),
-#>   method = col_character(),
-#>   printref = col_logical(),
-#>   ref_weight = col_character(),
-#>   check_split_passed = col_logical(),
-#>   ref = col_logical(),
-#>   region = col_logical(),
-#>   tool = col_character(),
-#>   criteria = col_logical()
-#> )
-#> ℹ Use `spec()` for the full column specifications.
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 mothur_1.47.0 <- read_tsv('results/optifit_split_results.tsv') %>% 
   mutate(mothur_version = '1.47.0')
+#> Rows: 200 Columns: 42
+#> ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> Delimiter: "\t"
+#> chr   (4): dataset, method, ref_weight, tool
+#> dbl  (32): label, cutoff, numotus, tp, tn, fp, fn, sensitivity, specificity,...
+#> lgl   (5): printref, check_split_passed, ref, region, criteria
+#> time  (1): h:m:s
 #> 
-#> ── Column specification ────────────────────────────────────────────────────────
-#> cols(
-#>   .default = col_double(),
-#>   `h:m:s` = col_time(format = ""),
-#>   dataset = col_character(),
-#>   method = col_character(),
-#>   printref = col_logical(),
-#>   ref_weight = col_character(),
-#>   check_split_passed = col_logical(),
-#>   ref = col_logical(),
-#>   region = col_logical(),
-#>   tool = col_character(),
-#>   criteria = col_logical()
-#> )
-#> ℹ Use `spec()` for the full column specifications.
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>% 
   rename(sec = s) %>% 
   select(dataset, mothur_version, method, ref_weight, ref_frac, seed, mcc, sec, fraction_mapped)
@@ -111,10 +99,11 @@ dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>%
 dat %>% 
   pivot_longer(c(mcc, sec, fraction_mapped), names_to = 'metric') %>% 
   #filter(metric != 'fraction_mapped' | (method == 'closed' & metric == 'fraction_mapped')) %>% 
-  ggplot(aes(x = mothur_version, y = value, color = method)) +
-  geom_boxplot(show.legend = FALSE) +
-  geom_jitter(width = 0.1) +
-  facet_wrap('metric', scales = 'free') +
+  ggplot(aes(x = mothur_version, y = value, color = dataset)) +
+  geom_boxplot() +
+  #geom_jitter(width = 0.1) +
+  facet_grid(dataset ~ metric, scales = 'free') +
+  coord_flip() +
   theme_bw()
 ```
 

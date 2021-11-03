@@ -94,10 +94,11 @@ dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>%
 dat %>% 
   pivot_longer(c(mcc, sec, fraction_mapped), names_to = 'metric') %>% 
   #filter(metric != 'fraction_mapped' | (method == 'closed' & metric == 'fraction_mapped')) %>% 
-  ggplot(aes(x = mothur_version, y = value, color = method)) +
-  geom_boxplot(show.legend = FALSE) +
-  geom_jitter(width = 0.1) +
-  facet_wrap('metric', scales = 'free') +
+  ggplot(aes(x = mothur_version, y = value, color = dataset)) +
+  geom_boxplot() +
+  #geom_jitter(width = 0.1) +
+  facet_grid(dataset ~ metric, scales = 'free') +
+  coord_flip() +
   theme_bw()
 ```
 
