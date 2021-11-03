@@ -1,5 +1,4 @@
 """ Benchmarking the OptiFit algorithm using datasets split into reference & query sets """
-import numpy
 
 configfile: 'config/config.yaml'
 
@@ -79,7 +78,8 @@ rule prep_subsample_ref:
         accnos=rules.split_weighted_subsample.output.ref_accnos,
         count="data/{dataset}/processed/{dataset}.count_table",
         fasta="data/{dataset}/processed/{dataset}.fasta",
-        dist="data/{dataset}/processed/{dataset}.dist"
+        dist="data/{dataset}/processed/{dataset}.dist",
+        mothur="bin/mothur-1.47.0/mothur"
     output:
         fasta=temp("data/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/ref/{dataset}.pick.fasta"),
         count=temp("data/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/ref/{dataset}.pick.count_table"),
@@ -90,16 +90,19 @@ rule prep_subsample_ref:
         outdir="data/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/ref/"
     shell:
         """
-        mothur '#set.logfile(name={log}); set.dir(output={params.outdir});
+        {input.mothur} "#set.logfile(name={log}); 
+            set.dir(output={params.outdir});
             get.seqs(accnos={input.accnos}, fasta={input.fasta});
             get.seqs(accnos=current, count={input.count});
-            get.dists(accnos=current, column={input.dist}) '
+            get.dists(accnos=current, column={input.dist}) 
+            "
         """
 
 rule cluster_ref:
     input:
         dist=rules.prep_subsample_ref.output.dist,
-        count=rules.prep_subsample_ref.output.count
+        count=rules.prep_subsample_ref.output.count,
+        mothur="bin/mothur-1.47.0/mothur"
     output:
         list=temp("results/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/cluster/{dataset}.pick.opti_mcc.list"),
         sensspec=temp('results/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/cluster/{dataset}.pick.opti_mcc.sensspec')
@@ -114,10 +117,12 @@ rule cluster_ref:
     priority: 1
     shell:
         """
-        mothur '#set.logfile(name={log}); set.dir(output={params.outdir});
-        set.seed(seed={wildcards.seed});
-        set.current(processors={resources.procs});
-        cluster(column={input.dist}, count={input.count}, cutoff=0.03) '
+        {input.mothur} "#set.logfile(name={log}); 
+            set.dir(output={params.outdir});
+            set.seed(seed={wildcards.seed});
+            set.current(processors={resources.procs});
+            cluster(column={input.dist}, count={input.count}, cutoff=0.03) 
+            "
         """
 
 rule fit_subsample:
@@ -125,7 +130,8 @@ rule fit_subsample:
         fasta="data/{dataset}/processed/{dataset}.fasta",
         count="data/{dataset}/processed/{dataset}.count_table",
         column="data/{dataset}/processed/{dataset}.dist",
-        reflist=rules.cluster_ref.output.list
+        reflist=rules.cluster_ref.output.list,
+        mothur="bin/mothur-1.47.0/mothur"
     output:
         sensspec=temp('results/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/fit/method_{method}/printref_{printref}/{dataset}.optifit_mcc.sensspec'),
         list=temp('results/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/fit/method_{method}/printref_{printref}/{dataset}.optifit_mcc.list'),
@@ -141,15 +147,18 @@ rule fit_subsample:
     priority: 2
     shell:
         """
-        mothur "#set.logfile(name={log}); set.dir(output={params.outdir});
-        set.seed(seed={wildcards.seed});
-        set.current(processors={resources.procs});
-        cluster.fit(reflist={input.reflist}, fasta={input.fasta}, count={input.count}, column={input.column},  printref={wildcards.printref}, method={wildcards.method}) "
+        {input.mothur} "#set.logfile(name={log}); 
+            set.dir(output={params.outdir});
+            set.seed(seed={wildcards.seed});
+            set.current(processors={resources.procs});
+            cluster.fit(reflist={input.reflist}, fasta={input.fasta}, count={input.count}, column={input.column},  printref={wildcards.printref}, method={wildcards.method}) 
+            "
         """
 
 rule list_seqs:
     input:
-        list=rules.fit_subsample.output.list
+        list=rules.fit_subsample.output.list,
+        mothur="bin/mothur-1.47.0/mothur"
     output:
         list_accnos=temp('results/{dataset}/refweight_{ref_weight}/reffrac_{ref_frac}/samplefrac_{sample_frac}/seed_{seed}/fit/method_{method}/printref_{printref}/{dataset}.optifit_mcc.accnos')
     params:
@@ -159,9 +168,10 @@ rule list_seqs:
     priority: 3
     shell:
         """
-        mothur "#set.logfile(name={log}); set.dir(output={params.outdir});
-        list.seqs(list={input.list})
-        "
+        {input.mothur} "#set.logfile(name={log}); 
+            set.dir(output={params.outdir});
+            list.seqs(list={input.list})
+            "
         """
 
 rule count_input_sizes:
