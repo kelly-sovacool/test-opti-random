@@ -34,6 +34,18 @@ wildcard_constraints:
     seed="\d+",
     printref="t|f"
 
+rule render_readme:
+    input:
+        rmd='README.Rmd',
+        tsv46='results/optifit_1.46.1.tsv',
+        tsv47='results/optifit_split_results.tsv'
+    output:
+        md="README.md"
+    shell:
+        """
+        R -e "rmarkdown::render('{input.rmd}')"
+        """
+
 rule rbind_optifit_split:
     input:
         code='code/py/rbind_files.py',
@@ -45,15 +57,6 @@ rule rbind_optifit_split:
     script:
         'code/py/rbind_files.py'
 
-rule render_readme:
-    input:
-        rmd='README.Rmd'
-    output:
-        md="README.md"
-    shell:
-        """
-        R -e "rmarkdown::render('{input.rmd}')"
-        """
 
 rule split_weighted_subsample:
     input:
