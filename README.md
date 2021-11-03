@@ -66,28 +66,40 @@ mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>%
                                   config[['ref_fracs']][['stop']],
                                   config[['ref_fracs']][['step']])/10)
          )
-#> Rows: 8800 Columns: 42
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: "\t"
-#> chr   (4): dataset, method, ref_weight, tool
-#> dbl  (32): label, cutoff, numotus, tp, tn, fp, fn, sensitivity, specificity,...
-#> lgl   (5): printref, check_split_passed, ref, region, criteria
-#> time  (1): h:m:s
 #> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> ── Column specification ─────────────────────────────────────────────────────────────────────────────────
+#> cols(
+#>   .default = col_double(),
+#>   `h:m:s` = col_time(format = ""),
+#>   dataset = col_character(),
+#>   method = col_character(),
+#>   printref = col_logical(),
+#>   ref_weight = col_character(),
+#>   check_split_passed = col_logical(),
+#>   ref = col_logical(),
+#>   region = col_logical(),
+#>   tool = col_character(),
+#>   criteria = col_logical()
+#> )
+#> ℹ Use `spec()` for the full column specifications.
 mothur_1.47.0 <- read_tsv('results/optifit_split_results.tsv') %>% 
   mutate(mothur_version = '1.47.0')
-#> Rows: 20 Columns: 42
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: "\t"
-#> chr   (4): dataset, method, ref_weight, tool
-#> dbl  (32): label, cutoff, numotus, tp, tn, fp, fn, sensitivity, specificity,...
-#> lgl   (5): printref, check_split_passed, ref, region, criteria
-#> time  (1): h:m:s
 #> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> ── Column specification ─────────────────────────────────────────────────────────────────────────────────
+#> cols(
+#>   .default = col_double(),
+#>   `h:m:s` = col_time(format = ""),
+#>   dataset = col_character(),
+#>   method = col_character(),
+#>   printref = col_logical(),
+#>   ref_weight = col_character(),
+#>   check_split_passed = col_logical(),
+#>   ref = col_logical(),
+#>   region = col_logical(),
+#>   tool = col_character(),
+#>   criteria = col_logical()
+#> )
+#> ℹ Use `spec()` for the full column specifications.
 dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>% 
   rename(sec = s) %>% 
   select(dataset, mothur_version, method, ref_weight, ref_frac, seed, mcc, sec, fraction_mapped)

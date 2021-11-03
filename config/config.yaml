@@ -8,11 +8,10 @@ references:
 weights:
 - simple
 methods:
-- open
 - closed
 ref_fracs:
     start: 5
     stop: 6
     step: 1
-seeds: 10
+seeds: 50
 configpath: 'config/config.yaml'
