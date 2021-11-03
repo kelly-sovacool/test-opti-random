@@ -6,11 +6,12 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "figures/"
+  fig.path = "figures/",
+  dpi = 300
 )
 ```
 
@@ -59,4 +60,42 @@ Run the workflow:
     
 ## Results
 
+```{r deps}
+library(tidyverse)
+config <- yaml::read_yaml('config/config.yaml')
+
+# like the Python range function
+py_range <- function(start, stop, step) {
+  seq.int(start, stop - 1, step)
+}
+```
+
+```{r prep_results}
+mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>% 
+  mutate(mothur_version = '1.46.1') %>% 
+  filter(dataset %in% config[['datasets']],
+         ref_weight %in% config[['weights']],
+         method %in% config[['methods']],
+         seed <= config[['seeds']],
+         ref_frac %in% c(py_range(config[['ref_fracs']][['start']],
+                                  config[['ref_fracs']][['stop']],
+                                  config[['ref_fracs']][['step']])/10)
+         )
+mothur_1.47.0 <- read_tsv('results/optifit_split_results.tsv') %>% 
+  mutate(mothur_version = '1.47.0')
+dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>% 
+  rename(sec = s) %>% 
+  select(dataset, mothur_version, method, ref_weight, ref_frac, seed, mcc, sec, fraction_mapped)
+```
+
+```{r plot_mcc_runtime}
+dat %>% 
+  pivot_longer(c(mcc, sec, fraction_mapped), names_to = 'metric') %>% 
+  #filter(metric != 'fraction_mapped' | (method == 'closed' & metric == 'fraction_mapped')) %>% 
+  ggplot(aes(x = mothur_version, y = value, color = method)) +
+  geom_boxplot(show.legend = FALSE) +
+  geom_jitter(width = 0.1) +
+  facet_wrap('metric', scales = 'free') +
+  theme_bw()
+```
 
