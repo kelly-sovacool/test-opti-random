@@ -47,11 +47,6 @@ or on the cluster: (modify your email and account name first)
 
 ``` r
 library(tidyverse)
-#> Warning: package 'ggplot2' was built under R version 4.0.5
-#> Warning: package 'tibble' was built under R version 4.0.5
-#> Warning: package 'readr' was built under R version 4.0.5
-#> Warning: package 'dplyr' was built under R version 4.0.5
-#> Warning: package 'stringr' was built under R version 4.0.5
 config <- yaml::read_yaml('config/config.yaml')
 
 # like the Python range function
@@ -72,7 +67,7 @@ mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>%
                                   config[['ref_fracs']][['step']])/10)
          )
 #> Rows: 8800 Columns: 42
-#> ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
 #> chr   (4): dataset, method, ref_weight, tool
 #> dbl  (32): label, cutoff, numotus, tp, tn, fp, fn, sensitivity, specificity,...
@@ -84,7 +79,7 @@ mothur_1.46.1 <- read_tsv('results/optifit_1.46.1.tsv') %>%
 mothur_1.47.0 <- read_tsv('results/optifit_split_results.tsv') %>% 
   mutate(mothur_version = '1.47.0')
 #> Rows: 20 Columns: 42
-#> ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
 #> chr   (4): dataset, method, ref_weight, tool
 #> dbl  (32): label, cutoff, numotus, tp, tn, fp, fn, sensitivity, specificity,...
@@ -97,6 +92,8 @@ dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>%
   rename(sec = s) %>% 
   select(dataset, mothur_version, method, ref_weight, ref_frac, seed, mcc, sec, fraction_mapped)
 ```
+
+### Plots
 
 ``` r
 dat %>% 

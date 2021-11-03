@@ -60,7 +60,7 @@ sbatch code/submit_KLS.sh
     
 ## Results
 
-```{r deps, message = FALSE}
+```{r deps, message=FALSE, warning=FALSE}
 library(tidyverse)
 config <- yaml::read_yaml('config/config.yaml')
 
@@ -87,6 +87,8 @@ dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>%
   rename(sec = s) %>% 
   select(dataset, mothur_version, method, ref_weight, ref_frac, seed, mcc, sec, fraction_mapped)
 ```
+
+### Plots
 
 ```{r boxplots}
 dat %>% 
