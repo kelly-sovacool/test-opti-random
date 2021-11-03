@@ -33,35 +33,25 @@ conda env create -f config/env.simple.yml
 conda activate optifit
 ```
 
-Run the workflow:
+Run the workflow locally:
 
-    locally:
-    ```bash
-    snakemake -j 4
-    ```
+``` bash
+snakemake -j 4
+```
 
-    or on the cluster: (modify your email and account name first)
-    ```
+or on the cluster: (modify your email and account name first)
+
     sbatch code/submit_KLS.sh
-    ```
 
 ## Results
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
-#> ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
-#> ✔ tibble  3.1.4     ✔ dplyr   1.0.7
-#> ✔ tidyr   1.1.3     ✔ stringr 1.4.0
-#> ✔ readr   2.0.2     ✔ forcats 0.5.1
 #> Warning: package 'ggplot2' was built under R version 4.0.5
 #> Warning: package 'tibble' was built under R version 4.0.5
 #> Warning: package 'readr' was built under R version 4.0.5
 #> Warning: package 'dplyr' was built under R version 4.0.5
 #> Warning: package 'stringr' was built under R version 4.0.5
-#> ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
 config <- yaml::read_yaml('config/config.yaml')
 
 # like the Python range function
@@ -119,4 +109,4 @@ dat %>%
   theme_bw()
 ```
 
-![](figures/plot_mcc_runtime-1.png)<!-- -->
+![](figures/boxplots-1.png)<!-- -->

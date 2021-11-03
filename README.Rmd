@@ -46,21 +46,21 @@ conda env create -f config/env.simple.yml
 conda activate optifit
 ```
 
-Run the workflow:
+Run the workflow locally:
 
-    locally:
-    ```bash
-    snakemake -j 4
-    ```
+```bash
+snakemake -j 4
+```
 
-    or on the cluster: (modify your email and account name first)
-    ```
-    sbatch code/submit_KLS.sh
-    ```
+or on the cluster: (modify your email and account name first)
+
+```
+sbatch code/submit_KLS.sh
+```
     
 ## Results
 
-```{r deps}
+```{r deps, message = FALSE}
 library(tidyverse)
 config <- yaml::read_yaml('config/config.yaml')
 
@@ -88,7 +88,7 @@ dat <- bind_rows(mothur_1.46.1, mothur_1.47.0) %>%
   select(dataset, mothur_version, method, ref_weight, ref_frac, seed, mcc, sec, fraction_mapped)
 ```
 
-```{r plot_mcc_runtime}
+```{r boxplots}
 dat %>% 
   pivot_longer(c(mcc, sec, fraction_mapped), names_to = 'metric') %>% 
   #filter(metric != 'fraction_mapped' | (method == 'closed' & metric == 'fraction_mapped')) %>% 
