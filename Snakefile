@@ -37,6 +37,7 @@ wildcard_constraints:
 rule render_readme:
     input:
         rmd='README.Rmd',
+        conf='config/config.yaml',
         tsv46='results/optifit_1.46.1.tsv',
         tsv47='results/optifit_split_results.tsv'
     output:
