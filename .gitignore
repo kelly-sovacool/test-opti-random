@@ -1,3 +1,4 @@
 .snakemake/
 benchmarks/
 data/
+.Rproj.user
