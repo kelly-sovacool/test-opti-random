@@ -45,6 +45,16 @@ rule rbind_optifit_split:
     script:
         'code/py/rbind_files.py'
 
+rule render_readme:
+    input:
+        rmd='README.Rmd'
+    output:
+        md="README.md"
+    shell:
+        """
+        R -e "rmarkdown::render('{input.rmd}')"
+        """
+
 rule split_weighted_subsample:
     input:
         code="code/py/split_weighted_subsample.py",
